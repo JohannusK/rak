@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />
+    <title>Rák</title>
+
+    <!-- Stylesheet references -->
+    <link rel="stylesheet" href="js/jquery/theme/TIFSjquery.css" />
+    <link rel="stylesheet" href="js/jquery/jquery.mobile.icons-1.4.5.css" />
+    <link rel="stylesheet" href="js/jquery/jquery.mobile.structure-1.4.5.css" />
+    <link rel="stylesheet" href="js/jquery/jquery-ui.css" />
+    <link rel="stylesheet" href="js/morris.css">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/radiobutton.css" />
+    <link rel="stylesheet" href="css/checkbox.css" />
+
+    <!-- Script references -->
+
+    <script src="js/jquery/jquery-1.12.0.js"></script>
+    <script src="js/jquery/jquery-ui.js"></script>
+    <script src="helpers.js"></script>
+    <script src="visDef.js"></script>
+    <script src="visualization.js"></script>
+    <script src="geo.js"></script>
+    <script src="gradient.js"></script>
+    <script src="js/hammer2.0.8.js"></script>
+    <script src="js/hammer-time.min.js"></script>
+    <script src="js/morris.js"></script>
+    <script src="js/raphael.js"></script>
+    <script src="chart.js"></script>
+    <script src="sim.js"></script>
+    <script src="gps.js"></script>
+
+</head>
+<body id="body">
+    <img src="img/location-white.svg" style="display: none;" />
+    <div id="valuesContainer" class="menu" style="position: fixed; z-index: 1001; display: none;">
+        <div id="controls" style="overflow: auto;">
+            <div id="ExpandButton" style="display: none; float: left;" class="menu">
+                <img src="img/expand.png" style="width: 2em;" onclick="slideToggle([&#39;ContractButton&#39;,&#39;ExpandButton&#39;,&#39;values&#39;])" />
+            </div>
+            <div id="ContractButton" style="float: left; background-color: transparent;" class="menu">
+                <img src="img/contract.png" style="width: 2em;" onclick="slideToggle([&#39;ContractButton&#39;,&#39;ExpandButton&#39;,&#39;values&#39;])" />
+            </div>
+            <img src="img/stopwatch.png" style="float: left; height: 2em;" onclick="timerToggle()" />
+        </div>
+        <div id="values" class="menu" style="background-color: transparent;">
+            <table id="valuesTable" class="narrowTable;" style="color: white;"></table>
+        </div>
+    </div>
+
+    <div id="MenuOpen" class="menuButton" onclick="MenuSet(true)">
+        <img src="img/menuOpen.svg" />
+    </div>
+    <div id="MenuClose" class="menuButton" onclick="MenuSet(false)">
+        <img src="img/menuClose.svg" />
+    </div>
+
+    <div id="MenuContainer">
+        <div id="MenuItems">
+            <div class="menuItem" onclick="slideDiv('Map');">
+                <img src="img/location-white.svg" />
+                <p>Kort</p>
+            </div>
+            <div class="menuItem" onclick="slideDiv('Time')">
+                <img src="img/clock-white.svg" />
+                <p>Tíð</p>
+            </div>
+            <div class="menuItem" onclick="slideDiv('Overview');">
+                <img src="img/chart.svg" />
+                <p>Yvirlit</p>
+            </div>
+            <div class="menuItem" onclick="slideDiv('GPS')">
+                <img src="img/navigation-white.svg" />
+                <p>GPS</p>
+            </div>
+            <div class="menuItem" onclick="slideDiv('About')">
+                <img src="img/info-white.svg" />
+                <p>Um</p>
+            </div>
+            <div class="menuItem" onclick="slideDiv('Settings')">
+                <img src="img/gear-white.svg" />
+                <p>val</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="Waiting">
+        <img src="img/clock-white.svg" />
+    </div>
+
+    <!--   Map Start -->
+
+    <div id="Map" class="appPage">
+        <div id="TimeContainer"> <!-- onclick="timerToggle()"-->
+            <img src="img/carat-left.svg" class="timeButton" style="margin-left: 0.25em;float:left;" id="TimeFalse" />
+                   <div id="TimeValueContainer" onclick="changeTimeFromMap()"> <!--     <div id="TimeValueContainer"  onclick="changeTimeFromMap()">  -->
+                <img src="img/calendar-time.svg" style="z-index: 100; border-style: none; height: 6vh;"/> 
+                <p style="z-index: 99;font-size: 3.5vh;text-shadow: 0vh 0.5vh black;padding:0;margin:0;">
+                <span id="MapSelectedDate"  ></span>
+            </p>
+              </div>
+                 
+            <img src="img/carat-right.svg" class="timeButton" style="margin-right: 0.25em;float:right;" id="TimeTrue" />
+        </div>
+        <div id="TouchLayer"></div>
+        <div id="ArrowsLayer"></div>
+        <div id="LocationInfo">
+            <img id="LocationInfoIcon" src="img/location-white.svg"></img>
+            <table>
+                <tr>
+                </tr>
+                <tr>
+                    <td id="LocationInfoAngle" />
+                </tr>
+                <tr>
+                    <td id="LocationInfoAmplitude" />
+                </tr>
+            </table>
+        </div>
+        <!-- Location canvas is used to paint the GPS location icon etc. -->
+        <canvas id="Location" style="z-index: 91; height: 100%; width: 100%; position: absolute; margin: auto; text-align: center; left: 0; right: 0; background-color: transparent; opacity: 1; cursor: crosshair;"></canvas>
+        <div id="GradientContainer">
+        <p style="text-align:left;font-weight:bold;text-shadow:0vh 0.3vh black;">m/s</p>
+        <div id="GradientContainerValues">
+                    <div class="gradientValue">
+                <p style="top: 0;">3</p>
+            </div>
+            <div class="gradientValue">
+                <p>2</p>
+            </div>
+            <div class="gradientValue">
+                <p>1</p>
+            </div>
+            <div class="gradientValue">
+                <p style="bottom: 0;">0</p>
+            </div>
+            <canvas id="Gradient" style="position: absolute; height: 100%; width: 100%; left: 0; right: 0; top: 0; bottom: 0; z-index: -1;"></canvas>
+        </div>        
+
+        </div>
+        <div id="ScaleContainer">
+            <canvas id="Scale" style="position: absolute; left: 0; height: inherit; width: inherit;"></canvas>
+            <p>
+                <span id="ScaleContainerText">- km</span>
+            </p>
+        </div>
+        <img id="LandMap" src="img/landmap.svg" style="z-index: 12" />
+        <canvas id="PreviewLand" style="z-index: 11;"></canvas>
+        <canvas id="Arrows" style="z-index: 10;"></canvas>
+        <canvas id="PreviewOcean" style="z-index: 9;"></canvas>
+        <canvas id="Image" style="z-index: 1; display: none;"></canvas>
+    </div>
+
+    <!--   Map End -->
+
+    <!--   Time Start -->
+
+    <div id="Time" class="appPage" style="overflow: auto;">
+        <p style="text-align: left; margin-left: 3vh;font-size:3.5vh;">Tíð frá:</p>
+        <div style="margin-bottom: 2vh; padding-top: 1vh; text-align: left; margin-left: 3vh;">
+            <input class="radiobutton" id="AutoStartOn" name="VehicleType.ID" type="radio" value="on" onclick='setAutoTime(this.value)' ></input>
+            <label for="AutoStartOn"><span></span>Telefon</label>
+            <input class="radiobutton" id="AutoStartOff" name="VehicleType.ID" type="radio" value="off" onclick='setAutoTime(this.value)' ></input><label for="AutoStartOff"><span></span >Kalendara</label>
+        </div>
+
+        <p style="text-align: center; margin-top: 0; margin-bottom: 3vh;margin-top:3vh; font-size: 4vh;"><span id="SelectedDateTime" /></p>
+
+        <input type="hidden" id="SelectedDate" />
+
+        <div id="DatePickerContainer">
+            <div id="DatePicker"></div>
+            <div id="HourSliderContainer">
+                <input type="range" name="HourSlider" id="HourSlider" value="720" min="0" max="1425" step="15" />
+            </div>
+        </div>
+        <div class="button" onclick='timeButtonClick()' style="margin-top: 1vh;">
+            <p style="margin: 0;">OK</p>
+        </div>
+    </div>
+
+    <!--   Time End -->
+
+    <!--   Overview Start -->
+
+    <div id="Overview" class="appPage" style="overflow-y: scroll; text-align: center; margin-top: 2em;">
+        <h3>
+            <span id="overviewSelectedDate" />
+        </h3>
+        <div class="button" style="margin-bottom: 3vh;" onclick='settingsButtonClick()'>
+            <p style="margin: 0;">Aftur til kort</p>
+        </div>
+    </div>
+
+    <!--   Overview End -->
+
+    <!-- Settings Start -->
+
+    <div id="Settings" class="appPage">
+        <div style="margin-top: 2em;"></div>
+        <div style="margin:auto;display:table;">      
+            <input type="checkbox" id="c12" name="cc" checked="true" onchange="gradientStateToggle();" />
+            <label for="c12"><span></span>Farvu skala</label>
+          
+            <input type="checkbox" id="c2" name="cc" checked="true" onchange="GPSStateToggle();" />
+            <label for="c2"><span></span>GPS</label>
+           <!--
+            <input type="checkbox" id="c3" name="cc" checked="true" onchange="ScaleStateToggle();" />
+            <label for="c3"><span></span>Mátistokkur</label>
+         -->
+            <input type="checkbox" id="c4" name="cc" checked="true" onchange="PaintArrowsStateToggle();" />
+            <label for="c4"><span></span>Pílar</label>
+         
+
+        </div>
+                    <div style="text-align: center; margin-top: 8vh;">
+                <div class="button" onclick='settingsButtonClick()'>
+                    <p style="margin: 0;">OK</p>
+                </div>
+            </div>
+    </div>
+
+    <!-- Settings End -->
+
+    <!--   GPS Start -->
+
+    <div id="GPS" class="appPage" style="margin-top: 2em;">
+        <div class="button" style="margin-bottom: 3vh;" onclick='settingsButtonClick()'>
+            <p style="margin: 0;">Aftur til kort</p>
+        </div>
+        <h1 style="margin: 0;">
+            <span id="GPS_Speed">-</span> km/t
+        </h1>
+        <div class="compassRose">
+            <img class="compassImage" id="GPS_Heading_Img" src="img/direction-white.svg" />
+            <img class="compassImage" src="img/compass-dial.svg" />
+        </div>
+        <table style="width: 100%; overflow: auto; text-align: center;" id="GPSTable">
+            <tr>
+                <td colspan="2">
+                    <span id="GPS_Heading">- °</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span id="GPS_Latitude">-</span>
+                    <span id="GPS_Longitude">-</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">Hædd: <span id="GPS_Altitude">-</span> m</td>
+            </tr>
+            <tr>
+                <td colspan="2">Neyvleiki: <span id="GPS_Accuracy">-</span> m</td>
+            </tr>
+        </table>
+    </div>
+
+    <!--   GPS End -->
+
+    <!--   About Start -->
+
+    <div id="About" class="appPage" style="margin-top: 2em;">
+        <div class="button" style="margin-bottom: 3vh;" onclick='settingsButtonClick()'>
+            <p style="margin: 0;">Aftur til kort</p>
+        </div>
+        <div id="AboutContent">
+            <p>Kunning, vegleiðingar og annað fæst við at vitja <a href="http://www.rak.fo">www.rak.fo</a></p>
+            <div class="sponsorSection">
+                <p>Stuðla verkætlanini hevur</p>
+                <img src="img/Statoil-Logo.svg" />
+                <p><a href="http://www.statoil.com">www.statoil.com</a></p>
+            </div>
+            <div class="sponsorSection">
+                <p>Verkætlanarleiðsla og ráðgeving í samband við rák og simulatión</p>
+                <img src="img/Fiskaaling-Logo.png" />
+                <p><a href="http://www.fiskaaling.fo">www.fiskaaling.fo</a></p>
+            </div>
+            <div class="sponsorSection">
+                <p>Grunddáta frá</p>
+                <img src="img/Frodskaparsetur-Logo.png" />
+                <p><a href="http://www.setur.fo">www.setur.fo</a></p>
+            </div>
+            <div class="sponsorSection">
+                <p>Tøknilig ráðgeving og forritan</p>
+                <img src="img/Magnussen-Logo.png" />
+                <p><a href="http://www.magnussen.fo">www.magnussen.fo</a></p>
+            </div>
+            <p>Kunning, vegleiðingar og annað fæst við at vitja <a href="http://www.rak.fo">www.rak.fo</a></p>
+            <br />
+            <br />
+        </div>
+    </div>
+
+    <!--   About End -->
+   <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("deviceready", ready(), false);
+     /*   $(document).ready(function () {
+           // initGPS();
+        });*/
+    </script>
+
+
+    <div id="LoadingDiv">
+        <div id="LoadingDivContent">
+            <div style="margin-bottom: 3vh">
+                <p id="StatusText" />
+            </div>
+            <div id="StatusImage">
+                <img id="img" />
+            </div>
+        </div>
+        <div id="SponsoredBy">
+            <img src="img/Statoil-Logo.svg" />
+        </div>
+    </div>
+
+</body>
+
+</html>

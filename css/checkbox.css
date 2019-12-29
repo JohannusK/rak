@@ -1,0 +1,43 @@
+input[type="checkbox"] {
+    display: none;
+    z-index: 90;
+}
+
+input[type="checkbox"] + label {
+    font-size: 3.5vh;
+    font-weight: bold;
+    z-index: 100;
+    white-space: nowrap;
+    color: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    /* margin-bottom: 0.5em; */
+}
+
+input[type="checkbox"] + label:hover {
+    font-weight: bold;
+}
+
+input[type="checkbox"] + label span {
+    display: inline-block;
+    width: 6vh;
+    height: 6vh;
+    background-size: initial;
+    margin: 0px 0.5vh 0 0;
+    vertical-align: middle;
+    background: url(img-radio/checkbox.svg) top no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    margin-top: -0.5vh;
+}
+
+input[type="checkbox"]:hover + label span {
+    background:url(img-radio/checkbox.svg) top no-repeat;
+    background-size:cover;
+}
+
+input[type="checkbox"]:checked + label span {
+	background:url(img-radio/checkbox-checked.svg) top no-repeat;
+	background-size:cover;
+	z-index: 80;
+}

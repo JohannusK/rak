@@ -1,0 +1,20 @@
+
+#speedometer {margin:auto;height:100%;width:100%;float:left;}
+
+.additionalRight{
+  float:right;
+  top: 0;
+  transform: translateY(70%);
+    padding-right:1em;
+
+}
+
+.additionalBottom{
+bottom:0;
+position:absolute;
+  transform: translateY(0%);
+  padding-right:1em;
+}
+  
+
+
