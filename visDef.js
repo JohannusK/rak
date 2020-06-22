@@ -661,7 +661,8 @@ function paintArrows(visData)
 			    	}
 			    		
 
-					if(amplitudesSum >-1 && paintArrow)
+					//if(amplitudesSum >-1 && paintArrow)
+					if(true) // Tekna allar pílarnir
 					{
 						var c = matrix2Disp(xPosn-(avgSizex/2),yPosn-(avgSizey/2),visData);
 						drawVector(c[0], c[1], amplitudesSum, anglesSum, visData.contextArrows);

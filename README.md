@@ -1,8 +1,12 @@
 # rak
 Hetta er eitt fork av Rák frá https://github.com/JohanMerger/rak
 
-Munurin er at tá ein trísur á eitt punkt so verða fleiri desimalar vístir aftaná komma.
-
+Munir:
+* Tá tríst verður á korti:
+	* Fleiri desimalar vístir aftaná komma tá tríst verður á korti
+	* Koordinatarnir vera vísir 
+* Annars
+	* Allir pílarnir vera vístir, eisini teir har streymferðin er undur 0.1 m/s
 
 
 Við Rák ber til at síggja streymin neyvari enn áður. Rák liggur á telefonini, og er altíð tøkt um okkurt ivamál stingur seg upp. Hetta er eisini ætlað teimum ið hava stuttleikabátar og kann eisini nýtast í undirvísing av ymiskum slag. Tað er ikki neyðugt við samband til alnótina fyri at nýta Rák www.rak.fo
