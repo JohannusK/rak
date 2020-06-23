@@ -181,9 +181,9 @@ function GPSDisplayUpdate(lat,long)
 
 	if(amplitude >=0 && angle != 'NaN')
 	{
-		amplitude = amplitude.toFixed(5);
-		$('#LocationInfoAmplitude').html(lat.toFixed(5) + ' ' + long.toFixed(5) + ' ' + amplitude +'m/s');
-		$('#LocationInfoAngle').html(angle +'° ' +CompassAngleName(angle));
+		amplitude = amplitude.toFixed(3);
+		$('#LocationInfoAmplitude').html(lat.toFixed(5) + ' ' + long.toFixed(5));
+		$('#LocationInfoAngle').html(amplitude +'m/s ' + angle +'° ' +CompassAngleName(angle));
 	}
 	else
 	{

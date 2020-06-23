@@ -5,12 +5,8 @@ var initializing = true;
 
 function ready()
 {
-
-
-
-
-	var delay = 100;
-	statusText ='Innlesur roknimynstur ';
+	var delay = 0;
+	statusText ='Innlesur roknimynstur';
 	step = step+1;
 
 	if(step==1)
